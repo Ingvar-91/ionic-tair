@@ -23,7 +23,7 @@ export class UserProductsService extends Api {
     return this.get(`${this.actionName}/getUserProduct?product_id=${product_id}`, this.headersAuth());
   }
 
-  getCharsProduct(category_id: number) {
+  getCharsProduct(category_id: number | string) {
     return this.get(`${this.actionName}/getCharsProduct?category_id=${category_id}`, this.headersAuth());
   }
 

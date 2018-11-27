@@ -58,10 +58,10 @@ export class UserProductPage extends BasePage  {
   product;
   categories;
   productData: ProductData = {
-    category_id: null,
-    shop_id: null,
-    shop_type_id: null,
-    images: null,
+    category_id: '',
+    shop_id: '',
+    shop_type_id: '',
+    images: '',
     chars: []
   };
   breadcrumb;
@@ -254,8 +254,9 @@ export class UserProductPage extends BasePage  {
               duration: 3000,
             });
             toast.present();
-
             loading.dismiss();
+
+
           });
     } else {
       this.subs$[this.subs$.length] =
@@ -266,10 +267,17 @@ export class UserProductPage extends BasePage  {
               duration: 3000,
             });
             toast.present();
-
             loading.dismiss();
+            this.form.reset();
+
+            this.productData.category_id = '';
+            this.chars = [];
+            this.imagesProducts = [];
+            this.breadcrumb = '';
           });
     }
+
+
   }
 
 
@@ -338,9 +346,9 @@ export class UserProductPage extends BasePage  {
 }
 
 interface ProductData {
-  category_id: number;
-  shop_id: number;
-  shop_type_id: number;
-  images: string;
+  category_id: number | string;
+  shop_id: number | string;
+  shop_type_id: number | string;
+  images: string | string;
   chars: number[];
 }
