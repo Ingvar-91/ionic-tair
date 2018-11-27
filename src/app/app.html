@@ -25,9 +25,19 @@
         Фотогалерея
       </button>
 
+      <button *ngIf="!authServise.auth" menuClose ion-item item-start (click)="showAuthPage()" no-lines detail-none color="dark">
+        <ion-icon name="log-in" color="light" padding-right></ion-icon>
+        Войти
+      </button>
+
       <button *ngIf="(authServise.auth) && (authServise.user) && (authServise.user.role == 3)" menuClose ion-item item-start (click)="showUserShopsPage()" no-lines detail-none color="dark">
-        <ion-icon name="images" color="light" padding-right></ion-icon>
+        <ion-icon name="home" color="light" padding-right></ion-icon>
         Мои магазины
+      </button>
+
+      <button *ngIf="authServise.auth" menuClose ion-item item-start (click)="logout()" no-lines detail-none color="dark">
+        <ion-icon name="log-out" color="light" padding-right></ion-icon>
+        Выйти из аккаунта
       </button>
 
     </ion-list>

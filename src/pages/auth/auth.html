@@ -4,6 +4,8 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+
+<!--
 <ion-header>
   <ion-navbar color="tiffany">
     <button ion-button menuToggle icon-only>
@@ -19,8 +21,23 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-</ion-header>
+</ion-header>-->
 
+<ion-header>
+
+  <ion-navbar color="tiffany">
+    <ion-buttons left>
+      <button ion-button icon-only (click)="viewCtrl.dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      <span *ngIf="!authServise.auth">Вход</span>
+      <span *ngIf="authServise.auth">Аккаунт</span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
 
 <ion-content class="bg-img">
 
@@ -37,16 +54,15 @@
     <ion-card *ngIf="!authServise.auth">
       <ion-card-content>
         <form [formGroup]="form">
-          <ion-item>
+          <ion-item no-padding no-margin>
             <ion-label floating>Электронная почта</ion-label>
             <ion-input type="email" formControlName="email"></ion-input>
           </ion-item>
-          <ion-item>
+          <ion-item no-padding no-margin>
             <ion-label floating>Пароль</ion-label>
             <ion-input type="password" formControlName="password"></ion-input>
           </ion-item>
-          <button type="button" ion-button full color="tiffany" [disabled]="form.invalid" (click)="login()">Войти</button>
-          <button type="button" ion-button full color="light">Регистрация</button>
+          <button margin-top type="button" ion-button full color="tiffany" [disabled]="form.invalid" (click)="login()">Войти</button>
         </form>
       </ion-card-content>
     </ion-card>

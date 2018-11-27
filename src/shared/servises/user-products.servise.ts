@@ -26,4 +26,29 @@ export class UserProductsService extends Api {
   getCharsProduct(category_id: number) {
     return this.get(`${this.actionName}/getCharsProduct?category_id=${category_id}`, this.headersAuth());
   }
+
+  removeImageProduct(fileName: string) {
+    return this.remove(`${this.actionName}/removeImageProduct?fileName=${fileName}`, this.headersAuth());
+  }
+
+  addImageProduct(formData: FormData){
+    return this.post(`${this.actionName}/addImageProduct`, formData, this.headersAuth());
+  }
+
+  addProduct(productData){
+    return this.post(`${this.actionName}/addProduct`, productData, this.headersAuth());
+  }
+
+  editProduct(productData){
+    return this.post(`${this.actionName}/editProduct`, productData, this.headersAuth());
+  }
+
+  getCategories() {
+    return this.get(`${this.actionName}/getCategories`, this.headersAuth());
+  }
+
+  removeProduct(product_id: number, shop_id: number) {
+    return this.remove(`${this.actionName}/removeProduct?product_id=${product_id}&shop_id=${shop_id}`, this.headersAuth());
+  }
+
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, LoadingController, ModalController, NavController, NavParams} from 'ionic-angular';
 import {SearchPage} from "../search/search";
 import {BasePage} from "../../shared/base.page";
 import {ProductPage} from "../product/product";
@@ -28,13 +28,14 @@ export class UserProductsPage extends BasePage {
     public navParams: NavParams,
     protected alertCtrl: AlertController,
     protected userProductsService: UserProductsService,
-
+    public loadingCtrl: LoadingController,
   ) {
     super(alertCtrl);
   }
 
   params = this.navParams.get('params');
   protected searchPage = SearchPage;
+  protected userProductPage = UserProductPage;
   shop = this.params.shop;
   products;
   infiniteScroll;
@@ -56,11 +57,11 @@ export class UserProductsPage extends BasePage {
 
   }
 
-  onClick(item){
+  onClick(item): void{
     this.navCtrl.push(UserProductPage, {params: {product: item}});
   }
 
-  doInfinite(infiniteScroll) {
+  doInfinite(infiniteScroll): void {
     this.infiniteScroll = infiniteScroll;
     this.pageNum = ++this.pageNum;
 
@@ -79,7 +80,7 @@ export class UserProductsPage extends BasePage {
       });
   }
 
-  doRefresh(refresher) {
+  doRefresh(refresher): void {
     this.pageNum = 1;
 
     this.subs$[this.subs$.length] =
@@ -94,6 +95,24 @@ export class UserProductsPage extends BasePage {
       });
   }
 
+  removeProduct(item): void {
+    console.log(88888);
+    let loading = this.loadingCtrl.create({
+      content: 'Пожалуйста подождите...'
+    });
+    loading.present();
+
+    this.subs$[this.subs$.length] =
+      this.userProductsService.removeProduct(
+        item.id,
+        this.shop.shop_id
+      )
+      .subscribe((data) => {
+        this.products = data.products;
+
+        loading.dismiss();
+      });
+  }
 
 
 }

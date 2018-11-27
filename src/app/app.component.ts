@@ -12,6 +12,7 @@ import {Network} from "@ionic-native/network";
 import {Subscription} from "rxjs/Subscription";
 import {AuthServise} from "../shared/servises/auth.servise";
 import {UserShopsPage} from "../pages/user-shops/user-shops";
+import {AuthPage} from "../pages/auth/auth";
 
 @Component({
   templateUrl: 'app.html'
@@ -34,7 +35,7 @@ export class MyApp implements OnDestroy {
     public events: Events,
     private network: Network,
     private alertCtrl: AlertController,
-    private authServise: AuthServise,
+    public authServise: AuthServise,
   ){
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -61,7 +62,6 @@ export class MyApp implements OnDestroy {
         this.authServise.user = data.user;
         this.authServise.auth = true;
       },err => {
-        console.log(err);
         this.authServise.auth = false;
       },() => {});
   }
@@ -123,5 +123,18 @@ export class MyApp implements OnDestroy {
       cssClass: "modal-full-screen"
     });
     modal.present();
+  }
+
+  showAuthPage() {
+    let modal = this.modalCtrl.create(AuthPage, null, {
+      cssClass: "modal-full-screen"
+    });
+    modal.present();
+  }
+
+  logout() {
+    this.authServise.user = null;
+    this.authServise.auth = false;
+    this.authServise.logout();
   }
 }

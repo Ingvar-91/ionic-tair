@@ -75,8 +75,6 @@ export class AuthServise extends Api {
 
   logout(): void {
     window.localStorage.setItem('access_token', '');
-    //window.localStorage.setItem('user', '');
-    //window.localStorage.clear();
   }
 
   /*check(): boolean {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import {SearchPage} from "../search/search";
 import {AuthServise} from "../../shared/servises/auth.servise";
 import {FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
@@ -26,8 +26,9 @@ export class AuthPage extends BasePage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private authServise: AuthServise,
-    protected alertCtrl: AlertController
+    public authServise: AuthServise,
+    public viewCtrl: ViewController,
+    protected alertCtrl: AlertController,
   ) {
     super(alertCtrl);
   }
