@@ -1,13 +1,9 @@
 import { Component } from '@angular/core';
-import {AlertController, IonicPage, LoadingController, ModalController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {SearchPage} from "../search/search";
 import {BasePage} from "../../shared/base.page";
-import {ProductPage} from "../product/product";
 import {UserProductsService} from "../../shared/servises/user-products.servise";
 import {UserProductPage} from "../user-product/user-product";
-import {ContactsAllPage} from "../contacts-all/contacts-all";
-import {UserProductCategoriesPage} from "../user-product-categories/user-product-categories";
-import {CategoriesPage} from "../categories/categories";
 
 /**
  * Generated class for the UserProductsPage page.
@@ -96,7 +92,6 @@ export class UserProductsPage extends BasePage {
   }
 
   removeProduct(item): void {
-    console.log(88888);
     let loading = this.loadingCtrl.create({
       content: 'Пожалуйста подождите...'
     });
