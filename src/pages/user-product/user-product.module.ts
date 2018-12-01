@@ -10,7 +10,6 @@ import {ImgPreloadModule} from "../../components/img-preload/img-preload.module"
   imports: [
     IonicPageModule.forChild(UserProductPage),
     ImgPreloadModule,
-
   ],
 })
 export class UserProductPageModule {}

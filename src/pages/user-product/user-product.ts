@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {
   AlertController,
   IonicPage,
@@ -16,6 +16,7 @@ import {UserProductCategoriesPage} from "../user-product-categories/user-product
 import {UserProductCharsPage} from "../user-product-chars/user-product-chars";
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import * as moment from "moment";
+import {Crop} from "@ionic-native/crop";
 
 /**
  * Generated class for the UserProductPage page.
@@ -40,6 +41,7 @@ export class UserProductPage extends BasePage  {
     public loadingCtrl: LoadingController,
     private camera: Camera,
     private toastCtrl: ToastController,
+    private crop: Crop,
   ) {
     super(alertCtrl);
   }
@@ -68,6 +70,8 @@ export class UserProductPage extends BasePage  {
   chars = [];
   maxDataDiscount;
   imagesProducts = [];
+
+  imgCrop;
 
   ionViewDidLoad() {
     this.maxDataDiscount = moment().add(48, 'M').format('YYYY-MM-DD');
@@ -116,6 +120,11 @@ export class UserProductPage extends BasePage  {
   }
 
   showCamera(): void {
+    let loading = this.loadingCtrl.create({
+      content: 'Пожалуйста подождите...'
+    });
+    loading.present();
+
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -124,11 +133,6 @@ export class UserProductPage extends BasePage  {
     }
 
     this.camera.getPicture(options).then((imageData) => {
-      let loading = this.loadingCtrl.create({
-        content: 'Пожалуйста подождите...'
-      });
-      loading.present();
-
       // imageData is either a base64 encoded string or a file URI
       // If it's base64 (DATA_URL):
       const base64Image = 'data:image/jpeg;base64,' + imageData;
@@ -138,20 +142,92 @@ export class UserProductPage extends BasePage  {
 
       this.subs$[this.subs$.length] =
         this.userProductsService.addImageProduct(formData)
-        .subscribe((data) => {
-          if(data){
-            this.imagesProducts.push(
-              {fullPath: data.fullPath, path: data.path, fileName: data.fileName}
-            );
-          }
+          .subscribe((data) => {
+            this.imgCrop = base64Image;
+            if(data){
+              this.imagesProducts.push(
+                {fullPath: data.fullPath, path: data.path, fileName: data.fileName}
+              );
+            }
+            loading.dismiss();
+          },
+          error => {
+            alert(error);
+          },
+          () => {}
+          );
 
-          loading.dismiss();
-        });
-
-    }, (err) => {
-      // Handle error
+    }, (error) => {
+      alert(error);
+      loading.dismiss();
     });
 
+  }
+
+  showGallery(): void {
+    let loading = this.loadingCtrl.create({
+      content: 'Пожалуйста подождите...'
+    });
+    loading.present();
+
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64 (DATA_URL):
+      const base64Image = 'data:image/jpeg;base64,' + imageData;
+
+      this.imgCrop = base64Image;
+
+      const formData = new FormData();
+      formData.append('image', base64Image);
+
+      this.subs$[this.subs$.length] =
+        this.userProductsService.addImageProduct(formData)
+          .subscribe((data) => {
+            if(data){
+              this.imagesProducts.push(
+                {fullPath: data.fullPath, path: data.path, fileName: data.fileName}
+              );
+            }
+
+            loading.dismiss();
+          },
+          error => {
+            alert(error)
+          },
+          () => {}
+          );
+
+    }, (error) => {
+      alert(error)
+      loading.dismiss();
+    });
+
+  }
+
+  cropImage(): void {
+    let options = {
+      quality: 100,
+      targetHeight: -1,
+      targetWidth: -1
+    };
+
+    this.crop.crop(this.imgCrop, {quality: 75})
+      .then(
+        newImage => {
+          //alert('ok')
+        },
+        error => {
+          alert(error)
+        }
+      );
   }
 
   removeImage(fileName: string, index: number): void {

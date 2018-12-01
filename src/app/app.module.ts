@@ -52,6 +52,7 @@ import {UserProductsService} from "../shared/servises/user-products.servise";
 import {UserProductCharsPageModule} from "../pages/user-product-chars/user-product-chars.module";
 import {UserProductCategoriesPageModule} from "../pages/user-product-categories/user-product-categories.module";
 import {Camera} from "@ionic-native/camera";
+import {Crop} from "@ionic-native/crop";
 
 @NgModule({
   declarations: [
@@ -93,7 +94,7 @@ import {Camera} from "@ionic-native/camera";
     UserProductsPageModule,
     UserProductPageModule,
     UserProductCharsPageModule,
-    UserProductCategoriesPageModule,
+    UserProductCategoriesPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -117,6 +118,7 @@ import {Camera} from "@ionic-native/camera";
     UserShopService,
     UserProductsService,
     Camera,
+    Crop,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ],
   schemas: [
