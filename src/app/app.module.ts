@@ -118,7 +118,6 @@ import {Crop} from "@ionic-native/crop";
     UserShopService,
     UserProductsService,
     Camera,
-    Crop,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ],
   schemas: [

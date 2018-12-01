@@ -16,7 +16,7 @@ import {UserProductCategoriesPage} from "../user-product-categories/user-product
 import {UserProductCharsPage} from "../user-product-chars/user-product-chars";
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import * as moment from "moment";
-import {Crop} from "@ionic-native/crop";
+import {AngularCropperjsComponent} from "angular-cropperjs";
 
 /**
  * Generated class for the UserProductPage page.
@@ -41,9 +41,21 @@ export class UserProductPage extends BasePage  {
     public loadingCtrl: LoadingController,
     private camera: Camera,
     private toastCtrl: ToastController,
-    private crop: Crop,
   ) {
     super(alertCtrl);
+
+    this.cropperOptions = {
+      dragMode: 'move',
+      aspectRatio: 1,
+      autoCrop: true,
+      movable: true,
+      zoomable: true,
+      scalable: true,
+      rotatable: true,
+      cropBoxResizable: false,
+      cropBoxMovable: false,
+      /*autoCropArea: 0.8,*/
+    };
   }
 
   form: FormGroup = new FormGroup({
@@ -70,6 +82,9 @@ export class UserProductPage extends BasePage  {
   chars = [];
   maxDataDiscount;
   imagesProducts = [];
+
+  cropperOptions;
+  @ViewChild('angularCropper') public angularCropper: AngularCropperjsComponent;
 
   imgCrop;
 
@@ -210,24 +225,6 @@ export class UserProductPage extends BasePage  {
       loading.dismiss();
     });
 
-  }
-
-  cropImage(): void {
-    let options = {
-      quality: 100,
-      targetHeight: -1,
-      targetWidth: -1
-    };
-
-    this.crop.crop(this.imgCrop, {quality: 75})
-      .then(
-        newImage => {
-          //alert('ok')
-        },
-        error => {
-          alert(error)
-        }
-      );
   }
 
   removeImage(fileName: string, index: number): void {

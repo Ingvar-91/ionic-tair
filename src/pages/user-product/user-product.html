@@ -115,13 +115,10 @@
               Изображения
             </ion-label>
             <ion-buttons item-end>
-              <button ion-button icon-only small no-margin color="blue" margin-right (click)="showGallery()">
+              <button ion-button icon-only small no-margin color="blue" padding-right (click)="showGallery()">
                 <ion-icon slot="icon-only" name="images"></ion-icon>
               </button>
               <button ion-button icon-only small no-margin color="tiffany" (click)="showCamera()">
-                <ion-icon slot="icon-only" name="camera"></ion-icon>
-              </button>
-              <button ion-button icon-only small no-margin color="red-400" (click)="cropImage()">
                 <ion-icon slot="icon-only" name="camera"></ion-icon>
               </button>
             </ion-buttons>
@@ -161,7 +158,7 @@
 
   <ion-card>
     <ion-card-content>
-
+      <angular-cropper [cropperOptions]="cropperOptions" [imageUrl]="'assets/762923-6.jpg'"></angular-cropper>
     </ion-card-content>
   </ion-card>
 
