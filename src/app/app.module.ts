@@ -53,6 +53,7 @@ import {UserProductCharsPageModule} from "../pages/user-product-chars/user-produ
 import {UserProductCategoriesPageModule} from "../pages/user-product-categories/user-product-categories.module";
 import {Camera} from "@ionic-native/camera";
 import {Crop} from "@ionic-native/crop";
+import {UserProductCropperPageModule} from "../pages/user-product-cropper/user-product-cropper.module";
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import {Crop} from "@ionic-native/crop";
     UserProductsPageModule,
     UserProductPageModule,
     UserProductCharsPageModule,
-    UserProductCategoriesPageModule
+    UserProductCategoriesPageModule,
+    UserProductCropperPageModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

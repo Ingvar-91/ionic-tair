@@ -12,9 +12,6 @@
       <button ion-button icon-only [navPush]="searchPage">
         <ion-icon slot="icon-only" name="search"></ion-icon>
       </button>
-      <button ion-button icon-only [navPush]="userProductPage" [navParams]="{shop: shop}">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </button>
     </ion-buttons>
   </ion-navbar>
 
@@ -25,6 +22,12 @@
   <ion-refresher (ionRefresh)="doRefresh($event)" *ngIf="!preloader">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
+  <ion-fab right bottom>
+    <button ion-fab color="orange" [navPush]="userProductPage" [navParams]="{shop: shop}">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 
   <ion-list *ngIf="!preloader">
     <ion-item-sliding *ngFor="let item of products">

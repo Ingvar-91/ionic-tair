@@ -115,7 +115,7 @@
               Изображения
             </ion-label>
             <ion-buttons item-end>
-              <button ion-button icon-only small no-margin color="blue" padding-right (click)="showGallery()">
+              <button ion-button icon-only small no-margin color="blue" margin-right (click)="showGallery()">
                 <ion-icon slot="icon-only" name="images"></ion-icon>
               </button>
               <button ion-button icon-only small no-margin color="tiffany" (click)="showCamera()">
@@ -137,7 +137,11 @@
               <h2>Фото {{i + 1}}</h2>
             </ion-item>
             <ion-item-options side="right">
-              <button ion-button color="danger" (click)="removeImage(item.fileName, i)">
+              <button *ngIf="(item.type == 'base64')" ion-button color="primary" (click)="showUserProductCropperPage(item.fullPath, i)">
+                <ion-icon name="settings"></ion-icon>
+                Настроить
+              </button>
+              <button ion-button color="danger" (click)="removeImage(item, i)">
                 <ion-icon name="trash"></ion-icon>
                 Удалить
               </button>
@@ -154,14 +158,8 @@
       </ion-card-content>
     </ion-card>
 
+
   </form>
-
-  <ion-card>
-    <ion-card-content>
-      <angular-cropper [cropperOptions]="cropperOptions" [imageUrl]="'assets/762923-6.jpg'"></angular-cropper>
-    </ion-card-content>
-  </ion-card>
-
   <ion-spinner id="preloader" *ngIf="preloader"></ion-spinner>
 
 </ion-content>

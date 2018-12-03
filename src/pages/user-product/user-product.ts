@@ -16,7 +16,8 @@ import {UserProductCategoriesPage} from "../user-product-categories/user-product
 import {UserProductCharsPage} from "../user-product-chars/user-product-chars";
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import * as moment from "moment";
-import {AngularCropperjsComponent} from "angular-cropperjs";
+import {UserProductCropperPage} from "../user-product-cropper/user-product-cropper";
+import {PhotoViewer} from "@ionic-native/photo-viewer";
 
 /**
  * Generated class for the UserProductPage page.
@@ -41,21 +42,9 @@ export class UserProductPage extends BasePage  {
     public loadingCtrl: LoadingController,
     private camera: Camera,
     private toastCtrl: ToastController,
+    private photoViewer: PhotoViewer,
   ) {
     super(alertCtrl);
-
-    this.cropperOptions = {
-      dragMode: 'move',
-      aspectRatio: 1,
-      autoCrop: true,
-      movable: true,
-      zoomable: true,
-      scalable: true,
-      rotatable: true,
-      cropBoxResizable: false,
-      cropBoxMovable: false,
-      /*autoCropArea: 0.8,*/
-    };
   }
 
   form: FormGroup = new FormGroup({
@@ -82,9 +71,6 @@ export class UserProductPage extends BasePage  {
   chars = [];
   maxDataDiscount;
   imagesProducts = [];
-
-  cropperOptions;
-  @ViewChild('angularCropper') public angularCropper: AngularCropperjsComponent;
 
   imgCrop;
 
@@ -135,10 +121,12 @@ export class UserProductPage extends BasePage  {
   }
 
   showCamera(): void {
+    /*
     let loading = this.loadingCtrl.create({
       content: 'Пожалуйста подождите...'
     });
     loading.present();
+    */
 
     const options: CameraOptions = {
       quality: 100,
@@ -148,10 +136,13 @@ export class UserProductPage extends BasePage  {
     }
 
     this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
       const base64Image = 'data:image/jpeg;base64,' + imageData;
 
+      this.imagesProducts.push(
+        {fullPath: base64Image, fileName: '', type: 'base64'}
+      );
+
+      /*
       const formData = new FormData();
       formData.append('image', base64Image);
 
@@ -171,19 +162,22 @@ export class UserProductPage extends BasePage  {
           },
           () => {}
           );
+      */
 
     }, (error) => {
       alert(error);
-      loading.dismiss();
+      //loading.dismiss();
     });
 
   }
 
   showGallery(): void {
+    /*
     let loading = this.loadingCtrl.create({
       content: 'Пожалуйста подождите...'
     });
     loading.present();
+    */
 
     const options: CameraOptions = {
       quality: 100,
@@ -194,12 +188,15 @@ export class UserProductPage extends BasePage  {
     }
 
     this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
       const base64Image = 'data:image/jpeg;base64,' + imageData;
 
       this.imgCrop = base64Image;
 
+      this.imagesProducts.push(
+        {fullPath: base64Image, fileName: '', type: 'base64'}
+      );
+
+      /*
       const formData = new FormData();
       formData.append('image', base64Image);
 
@@ -219,26 +216,30 @@ export class UserProductPage extends BasePage  {
           },
           () => {}
           );
-
+      */
     }, (error) => {
       alert(error)
-      loading.dismiss();
+      // loading.dismiss();
     });
 
   }
 
-  removeImage(fileName: string, index: number): void {
+  removeImage(item: any, index: number): void {
     let loading = this.loadingCtrl.create({
       content: 'Пожалуйста подождите...'
     });
     loading.present();
 
-    this.subs$[this.subs$.length] =
-      this.userProductsService.removeImageProduct(fileName)
-        .subscribe((data) => {
-          this.imagesProducts.splice(index, 1);
-          loading.dismiss();
-        });
+    if(item.type = 'string') {
+      this.subs$[this.subs$.length] =
+        this.userProductsService.removeImageProduct(item.fileName)
+          .subscribe((data) => {
+            this.imagesProducts.splice(index, 1);
+            loading.dismiss();
+          });
+    } else if(item.type = 'base64') {
+      this.imagesProducts.splice(index, 1);
+    }
   }
 
   save() {
@@ -262,16 +263,33 @@ export class UserProductPage extends BasePage  {
     const date_remove = moment().add(3, 'M').format('YYYY-MM-DD HH:mm:ss');
     formData.append('date_remove', String(date_remove));
 
+    /**/
     const imagesArr = [];
     let images = '';
     if(this.imagesProducts && this.imagesProducts.length) {
       this.imagesProducts.forEach((item) => {
-        imagesArr.push(item.fileName);
+        if(item.type == 'string') {
+          imagesArr.push(item.fileName);
+        }
       });
-      images = imagesArr.join('|');
+      if(imagesArr.length) {
+        images = imagesArr.join('|');
+      }
       this.productData.images = images;
     }
     formData.append('images', String(images));
+    //-------------------------------------------//
+    let imagesArrBase64 = [];
+    if(this.imagesProducts && this.imagesProducts.length) {
+      this.imagesProducts.forEach((item) => {
+        if(item.type == 'base64') {
+          imagesArrBase64.push(item.fullPath);
+        }
+      });
+    }
+    formData.append('imagesArrBase64', JSON.stringify(imagesArrBase64));
+    imagesArrBase64 = [];
+    /**/
 
     /* CHARS */
     let chars = [];
@@ -302,7 +320,7 @@ export class UserProductPage extends BasePage  {
       toastCategory.present();
       return;
     }
-    if(!formData.get('images')) {
+    if( (!formData.get('images') && (!formData.get('imagesArrBase64'))) ) {
       let toastImages = this.toastCtrl.create({
         message: 'Добавьте изображение',
         duration: 3000,
@@ -328,8 +346,6 @@ export class UserProductPage extends BasePage  {
             });
             toast.present();
             loading.dismiss();
-
-
           });
     } else {
       this.subs$[this.subs$.length] =
@@ -352,7 +368,6 @@ export class UserProductPage extends BasePage  {
 
 
   }
-
 
   showCategories() {
     let modal = this.modalCtrl.create(UserProductCategoriesPage, {categories: this.categories}, {
@@ -414,6 +429,38 @@ export class UserProductPage extends BasePage  {
       }
     }
     return chars;
+  }
+
+  /**/
+  showUserProductCropperPage(image, index) {
+    let modal = this.modalCtrl.create(UserProductCropperPage, {image: image, index: index}, {
+      cssClass: "modal-full-screen"
+    });
+    modal.present();
+
+    modal.onDidDismiss(data => {
+      if(data.image) {
+        if(this.imagesProducts[index]) {
+          this.imagesProducts.splice(index, 1);
+          this.imagesProducts.push(
+            {fullPath:  data.image, fileName: '', type: 'base64'}
+          );
+        }
+      }
+      /*let imagesProducts = this.imagesProducts;
+      this.imagesProducts = [];
+      if(data.image) {
+        if(imagesProducts[data.index] && imagesProducts[data.index].fullPath) {
+          imagesProducts[data.index].fullPath = data.image;
+        }
+      }
+      this.imagesProducts = imagesProducts;*/
+    });
+  }
+
+  /* посмотреть увеличенное фото продуката */
+  showPhotoProduct(item) {
+    this.photoViewer.show(item.fullPath);
   }
 
 }

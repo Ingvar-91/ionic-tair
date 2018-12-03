@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { UserProductPage } from './user-product';
+import { UserProductCropperPage } from './user-product-cropper';
 import {ImgPreloadModule} from "../../components/img-preload/img-preload.module";
 import {AngularCropperjsModule} from "angular-cropperjs";
 
 @NgModule({
   declarations: [
-    UserProductPage,
+    UserProductCropperPage,
   ],
   imports: [
-    IonicPageModule.forChild(UserProductPage),
+    IonicPageModule.forChild(UserProductCropperPage),
     ImgPreloadModule,
     AngularCropperjsModule,
   ],
 })
-export class UserProductPageModule {}
+export class UserProductCropperPageModule {}

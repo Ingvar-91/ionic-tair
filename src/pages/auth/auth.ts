@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams, ToastController, ViewController} from 'ionic-angular';
 import {SearchPage} from "../search/search";
 import {AuthServise} from "../../shared/servises/auth.servise";
 import {FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
@@ -29,6 +29,7 @@ export class AuthPage extends BasePage {
     public authServise: AuthServise,
     public viewCtrl: ViewController,
     protected alertCtrl: AlertController,
+    private toastCtrl: ToastController
   ) {
     super(alertCtrl);
   }
@@ -73,6 +74,14 @@ export class AuthPage extends BasePage {
 
       this.authServise.user = data;
       this.authServise.auth = true;
+
+      let toast = this.toastCtrl.create({
+        message: 'Вы были успешно авторизованы',
+        duration: 3000,
+      });
+      toast.present();
+
+      this.viewCtrl.dismiss();
     });
   }
 

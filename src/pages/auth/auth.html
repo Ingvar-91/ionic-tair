@@ -42,6 +42,24 @@
 <ion-content class="bg-img">
 
   <div *ngIf="!preloader">
+
+    <ion-card>
+      <ion-card-content>
+        <form [formGroup]="form">
+          <ion-item no-padding no-margin>
+            <ion-label floating>Электронная почта</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+          </ion-item>
+          <ion-item no-padding no-margin>
+            <ion-label floating>Пароль</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+          </ion-item>
+          <button margin-top type="button" ion-button full color="tiffany" [disabled]="form.invalid" (click)="login()">Войти</button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <!--
     <ion-card *ngIf="authServise.auth">
       <ion-card-content>
         <ion-label>
@@ -66,6 +84,7 @@
         </form>
       </ion-card-content>
     </ion-card>
+    -->
 
   </div>
 
