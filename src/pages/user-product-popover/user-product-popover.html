@@ -1,0 +1,4 @@
+<ion-list no-margin>
+  <button ion-item detail-none no-lines (click)="edit()" *ngIf="(item.type == 'base64')">Редактировать</button>
+  <button ion-item detail-none no-lines (click)="remove()">Удалить</button>
+</ion-list>

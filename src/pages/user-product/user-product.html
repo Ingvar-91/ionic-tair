@@ -68,7 +68,7 @@
               Категория
             </ion-label>
             <ion-buttons item-end>
-              <button ion-button icon-only small no-margin color="tiffany" (click)="showCategories()">
+              <button clear ion-button icon-only no-margin color="grey" (click)="showCategories()">
                 <ion-icon slot="icon-only" name="create"></ion-icon>
               </button>
             </ion-buttons>
@@ -92,7 +92,7 @@
             <span>{{item.title}}</span>
           </ion-label>
           <ion-buttons item-end>
-            <button ion-button icon-only small color="tiffany" (click)="showChars(item)">
+            <button clear ion-button icon-only color="grey" (click)="showChars(item)">
               <ion-icon slot="icon-only" name="create"></ion-icon>
             </button>
           </ion-buttons>
@@ -115,10 +115,10 @@
               Изображения
             </ion-label>
             <ion-buttons item-end>
-              <button ion-button icon-only small no-margin color="blue" margin-right (click)="showGallery()">
+              <button clear ion-button icon-only no-margin color="grey" margin-right (click)="showGallery()">
                 <ion-icon slot="icon-only" name="images"></ion-icon>
               </button>
-              <button ion-button icon-only small no-margin color="tiffany" (click)="showCamera()">
+              <button clear ion-button icon-only no-margin color="grey" (click)="showCamera()">
                 <ion-icon slot="icon-only" name="camera"></ion-icon>
               </button>
             </ion-buttons>
@@ -135,9 +135,12 @@
                 <img-preload [img]="item.fullPath"></img-preload>
               </ion-thumbnail>
               <h2>Фото {{i + 1}}</h2>
+              <button clear color="grey" ion-button icon-only (click)="showPopImage($event, item, i)" item-end>
+                <ion-icon slot="icon-only" name="more"></ion-icon>
+              </button>
             </ion-item>
             <ion-item-options side="right">
-              <button *ngIf="(item.type == 'base64')" ion-button color="primary" (click)="showUserProductCropperPage(item.fullPath, i)">
+              <button *ngIf="(item.type == 'base64')" ion-button color="primary" (click)="showUserProductCropperPage(item, i)">
                 <ion-icon name="settings"></ion-icon>
                 Настроить
               </button>

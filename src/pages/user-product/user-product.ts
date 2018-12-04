@@ -5,7 +5,7 @@ import {
   LoadingController,
   ModalController,
   NavController,
-  NavParams,
+  NavParams, PopoverController,
   ToastController
 } from 'ionic-angular';
 import {BasePage} from "../../shared/base.page";
@@ -18,6 +18,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import * as moment from "moment";
 import {UserProductCropperPage} from "../user-product-cropper/user-product-cropper";
 import {PhotoViewer} from "@ionic-native/photo-viewer";
+import {UserProductPopoverPage} from "../user-product-popover/user-product-popover";
 
 /**
  * Generated class for the UserProductPage page.
@@ -43,6 +44,7 @@ export class UserProductPage extends BasePage  {
     private camera: Camera,
     private toastCtrl: ToastController,
     private photoViewer: PhotoViewer,
+    public popoverCtrl: PopoverController,
   ) {
     super(alertCtrl);
   }
@@ -225,12 +227,12 @@ export class UserProductPage extends BasePage  {
   }
 
   removeImage(item: any, index: number): void {
-    let loading = this.loadingCtrl.create({
-      content: 'Пожалуйста подождите...'
-    });
-    loading.present();
-
     if(item.type = 'string') {
+      let loading = this.loadingCtrl.create({
+        content: 'Пожалуйста подождите...'
+      });
+      loading.present();
+
       this.subs$[this.subs$.length] =
         this.userProductsService.removeImageProduct(item.fileName)
           .subscribe((data) => {
@@ -432,8 +434,8 @@ export class UserProductPage extends BasePage  {
   }
 
   /**/
-  showUserProductCropperPage(image, index) {
-    let modal = this.modalCtrl.create(UserProductCropperPage, {image: image, index: index}, {
+  showUserProductCropperPage(item, index) {
+    let modal = this.modalCtrl.create(UserProductCropperPage, {image: item.fullPath, index: index}, {
       cssClass: "modal-full-screen"
     });
     modal.present();
@@ -458,9 +460,16 @@ export class UserProductPage extends BasePage  {
     });
   }
 
-  /* посмотреть увеличенное фото продуката */
-  showPhotoProduct(item) {
-    this.photoViewer.show(item.fullPath);
+  showPopImage(event, item, index) {
+    let popover = this.popoverCtrl.create(UserProductPopoverPage, {item: item, index: index});
+    popover.present({ev: event});
+    popover.onDidDismiss(data => {
+      if(data && data.remove) {
+        this.removeImage(item, index);
+      } else if(data && data.edit) {
+        this.showUserProductCropperPage(item, index);
+      }
+    });
   }
 
 }
